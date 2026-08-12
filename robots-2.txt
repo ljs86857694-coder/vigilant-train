@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ljs86857694-coder.github.io/vigilant-train/sitemap.xml
