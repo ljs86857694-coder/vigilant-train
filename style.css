@@ -1,0 +1,522 @@
+/* ============================================================
+   재테크 다이어리 — 통장(passbook) 콘셉트 디자인 시스템
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&family=IBM+Plex+Mono:wght@500;600&display=swap');
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
+
+:root {
+  --paper: #eeece0;
+  --paper-alt: #e6e3d3;
+  --ink: #1c2b24;
+  --ink-soft: #45564c;
+  --green: #2f5d50;
+  --green-dark: #17332c;
+  --stamp-red: #ac3b34;
+  --gold: #a1791f;
+  --line: #c9c3ac;
+  --line-strong: #a89f80;
+  --max-w: 880px;
+
+  --font-display: "Noto Serif KR", serif;
+  --font-body: "Pretendard", -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.7;
+  font-size: 16px;
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 37px,
+      rgba(43, 56, 48, 0.05) 38px
+    );
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--stamp-red);
+  outline-offset: 3px;
+}
+
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  border-bottom: 2px solid var(--ink);
+  background: var(--paper);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.site-header .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  padding-bottom: 16px;
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.wordmark small {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--green);
+  letter-spacing: 0.02em;
+}
+
+nav.main-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 26px;
+  margin: 0;
+  padding: 0;
+}
+
+nav.main-nav a {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  padding: 4px 0;
+  border-bottom: 2px solid transparent;
+}
+
+nav.main-nav a:hover,
+nav.main-nav a.active {
+  color: var(--green);
+  border-bottom-color: var(--green);
+}
+
+/* ---------- Ad slot ---------- */
+.ad-slot {
+  max-width: var(--max-w);
+  margin: 28px auto;
+  padding: 10px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 2px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+
+.ad-slot span {
+  display: block;
+  padding: 22px 0;
+}
+
+/* ---------- Hero (Passbook cover) ---------- */
+.passbook-hero {
+  max-width: var(--max-w);
+  margin: 40px auto 0;
+  padding: 0 24px;
+}
+
+.passbook {
+  position: relative;
+  background: var(--green);
+  color: #f2efe1;
+  border-radius: 6px;
+  padding: 40px 36px 30px;
+  box-shadow: 0 18px 0 -8px rgba(23, 51, 44, 0.25), 0 24px 30px -18px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+
+.passbook::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  border: 1px solid rgba(242, 239, 225, 0.35);
+  border-radius: 3px;
+  pointer-events: none;
+}
+
+.passbook-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  color: #cfe3da;
+  margin: 0 0 14px;
+}
+
+.passbook-title {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 5vw, 44px);
+  font-weight: 900;
+  margin: 0 0 12px;
+  line-height: 1.25;
+}
+
+.passbook-sub {
+  font-size: 15px;
+  color: #dbe8e1;
+  max-width: 46ch;
+  margin: 0;
+}
+
+.stamp {
+  position: absolute;
+  top: 28px;
+  right: 34px;
+  width: 96px;
+  height: 96px;
+  transform: rotate(-11deg);
+  opacity: 0;
+  animation: stamp-in 0.5s cubic-bezier(.2,1.4,.4,1) 0.4s forwards;
+}
+
+@keyframes stamp-in {
+  0% { opacity: 0; transform: rotate(-11deg) scale(1.8); }
+  60% { opacity: 1; }
+  100% { opacity: 1; transform: rotate(-11deg) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stamp { opacity: 1; animation: none; }
+}
+
+.stamp svg { width: 100%; height: 100%; }
+
+/* ---------- Ledger (post list as bankbook entries) ---------- */
+.ledger {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 46px 24px 10px;
+}
+
+.ledger-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 10px;
+  margin-bottom: 4px;
+}
+
+.ledger-heading h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  margin: 0;
+}
+
+.ledger-heading .count {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.entry {
+  display: grid;
+  grid-template-columns: 92px 1fr 88px;
+  gap: 18px;
+  align-items: center;
+  padding: 20px 4px;
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.entry:hover .entry-title { color: var(--green); }
+.entry:hover .entry-arrow { transform: translateX(4px); }
+
+.entry-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.entry-tag {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--green);
+  border: 1px solid var(--green);
+  border-radius: 2px;
+  padding: 1px 5px;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+
+.entry-title {
+  font-weight: 700;
+  font-size: 16.5px;
+  display: block;
+  margin-bottom: 4px;
+  transition: color 0.15s ease;
+}
+
+.entry-desc {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+.entry-arrow {
+  font-family: var(--font-mono);
+  text-align: right;
+  color: var(--gold);
+  font-size: 13px;
+  transition: transform 0.15s ease;
+}
+
+@media (max-width: 620px) {
+  .entry { grid-template-columns: 1fr; gap: 4px; }
+  .entry-arrow { text-align: left; }
+  .entry-date { order: -1; }
+}
+
+/* ---------- Intro / feature blocks ---------- */
+.intro {
+  max-width: var(--max-w);
+  margin: 50px auto 0;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.intro-card {
+  background: var(--paper-alt);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 20px 18px;
+}
+
+.intro-card .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--gold);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.intro-card h3 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  margin: 0 0 8px;
+}
+
+.intro-card p {
+  font-size: 13.5px;
+  color: var(--ink-soft);
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .intro { grid-template-columns: 1fr; }
+}
+
+/* ---------- Article page ---------- */
+.article-header {
+  max-width: 720px;
+  margin: 48px auto 0;
+  padding: 0 24px;
+}
+
+.breadcrumb {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 20px;
+}
+
+.breadcrumb:hover { color: var(--green); }
+
+.article-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--green);
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+
+.article-header h1 {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 4vw, 36px);
+  line-height: 1.35;
+  margin: 0 0 14px;
+}
+
+.article-lede {
+  font-size: 16px;
+  color: var(--ink-soft);
+  border-left: 3px solid var(--gold);
+  padding-left: 16px;
+  margin: 0 0 8px;
+}
+
+article.body-copy {
+  max-width: 720px;
+  margin: 26px auto 0;
+  padding: 0 24px 20px;
+}
+
+article.body-copy h2 {
+  font-family: var(--font-display);
+  font-size: 21px;
+  margin: 40px 0 14px;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+  padding-top: 20px;
+}
+
+article.body-copy h2:first-child { border-top: none; padding-top: 0; }
+
+article.body-copy p { margin: 0 0 16px; font-size: 15.5px; }
+
+article.body-copy ul, article.body-copy ol {
+  margin: 0 0 16px;
+  padding-left: 22px;
+  font-size: 15.5px;
+}
+
+article.body-copy li { margin-bottom: 8px; }
+
+.stat-line {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  background: var(--paper-alt);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 16px 20px;
+  margin: 22px 0;
+}
+
+.stat-line div { font-family: var(--font-mono); font-size: 13px; }
+.stat-line strong { display: block; font-size: 19px; color: var(--green); }
+
+.callout {
+  background: var(--green);
+  color: #f2efe1;
+  border-radius: 4px;
+  padding: 18px 20px;
+  margin: 24px 0;
+  font-size: 14.5px;
+}
+
+.callout strong { color: #fff; }
+
+.disclaimer {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  background: var(--paper-alt);
+  border: 1px dashed var(--line-strong);
+  padding: 12px 16px;
+  border-radius: 3px;
+  margin: 30px 0 0;
+  line-height: 1.6;
+}
+
+/* ---------- Author / share row ---------- */
+.share-row {
+  max-width: 720px;
+  margin: 30px auto 0;
+  padding: 20px 24px;
+  border-top: 2px solid var(--ink);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.share-row .back-link {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-decoration: none;
+  color: var(--green);
+  font-weight: 600;
+}
+
+/* ---------- About page ---------- */
+.page-copy {
+  max-width: 720px;
+  margin: 48px auto;
+  padding: 0 24px;
+}
+
+.page-copy h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  margin: 0 0 20px;
+}
+
+.page-copy p { font-size: 15.5px; margin-bottom: 16px; }
+
+/* ---------- Footer ---------- */
+footer.site-footer {
+  margin-top: 70px;
+  border-top: 2px solid var(--ink);
+  background: var(--paper-alt);
+}
+
+footer .wrap {
+  padding: 30px 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+footer .wordmark { font-size: 16px; }
+
+footer p {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+  max-width: 42ch;
+  margin: 8px 0 0;
+}
+
+footer .foot-links {
+  display: flex;
+  gap: 18px;
+  list-style: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+footer .foot-links a { text-decoration: none; color: var(--ink-soft); }
+footer .foot-links a:hover { color: var(--green); }
